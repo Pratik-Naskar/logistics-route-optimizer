@@ -1,0 +1,159 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Register | Logistics Route Optimizer</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='auth.css') }}">
+</head>
+
+<body>
+
+    <!-- Background Effects -->
+    <div class="background-glow glow-one"></div>
+    <div class="background-glow glow-two"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+
+        <a href="{{ url_for('home') }}" class="brand">
+            <span class="brand-icon">L</span>
+            LOGISTICS <span>ROUTE OPTIMIZER</span>
+        </a>
+
+        <div class="nav-status">
+            <span class="status-dot"></span>
+            SMART LOGISTICS PLATFORM
+        </div>
+
+    </nav>
+
+    <!-- Registration Section -->
+    <main class="auth-container">
+
+        <section class="auth-card register-card">
+
+            <div class="auth-logo">LRO</div>
+
+            <div class="eyebrow">
+                <span class="red-line"></span>
+                CREATE YOUR ACCOUNT
+            </div>
+
+            <h1>
+                JOIN <span class="red-text">LRO.</span>
+            </h1>
+
+            <p class="auth-description">
+                Create your personal account to manage
+                vehicles, deliveries and optimized routes.
+            </p>
+
+            <!-- Registration Form -->
+            <form method="POST" action="{{ url_for('register') }}">
+
+                <div class="form-group">
+                    <label for="fullname">FULL NAME</label>
+
+                    <input
+                        type="text"
+                        id="fullname"
+                        name="fullname"
+                        placeholder="Enter your full name"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="email">EMAIL ADDRESS</label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Enter your email address"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="mobile">MOBILE NUMBER</label>
+
+                    <input
+                        type="tel"
+                        id="mobile"
+                        name="mobile"
+                        placeholder="Enter your mobile number"
+                        pattern="[0-9]{10}"
+                        maxlength="10"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">PASSWORD</label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Create a password"
+                        minlength="8"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm_password">CONFIRM PASSWORD</label>
+
+                    <input
+                        type="password"
+                        id="confirm_password"
+                        name="confirm_password"
+                        placeholder="Re-enter your password"
+                        minlength="8"
+                        required
+                    >
+                </div>
+
+                {% if error %}
+                    <div class="error-message">
+                        {{ error }}
+                    </div>
+                {% endif %}
+
+                <button type="submit" class="auth-button">
+                    <span>CREATE MY ACCOUNT</span>
+                    <span class="arrow">→</span>
+                </button>
+
+            </form>
+
+            <div class="auth-divider"></div>
+
+            <p class="auth-switch">
+                Already have an account?
+                <a href="{{ url_for('login') }}">Login</a>
+            </p>
+
+            <a href="{{ url_for('home') }}" class="back-link">
+                ← BACK TO WELCOME PAGE
+            </a>
+
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <span>LOGISTICS ROUTE OPTIMIZER © 2026</span>
+        <span>INTELLIGENCE • EFFICIENCY • DELIVERY</span>
+    </footer>
+
+</body>
+</html>

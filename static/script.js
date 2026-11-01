@@ -280,47 +280,16 @@ document.getElementById('optimizeBtn').addEventListener('click', async function 
         }
 
         const ordered = data.route.map(index => locations[index]);
+        
         // DISPLAY SELECTED VEHICLE ON MAP
-if (vehicleMarker) {
-    map.removeLayer(vehicleMarker);
-    vehicleMarker = null;
-}
 
-if (selectedVehicle) {
-    const vehicleIcons = {
-        Truck: '🚚',
-        Van: '🚐',
-        'Mini Truck': '🚛',
-        Bike: '🏍️'
-    };
+        lastRouteStart = {
+            lat: ordered[0].lat,
+            lon: ordered[0].lon
+        };
 
-    const vehicleSymbol = vehicleIcons[selectedVehicle.type] || '🚚';
+        showSelectedVehicleMarker();
 
-    const vehicleIcon = L.divIcon({
-        className: 'vehicle-map-icon',
-        html: `<div style="
-            font-size:30px;
-            background:#111827;
-            border:2px solid #38bdf8;
-            border-radius:12px;
-            padding:7px;
-            box-shadow:0 0 18px #38bdf8;
-        ">${vehicleSymbol}</div>`,
-        iconSize: [48, 48],
-        iconAnchor: [24, 24]
-    });
-
-    vehicleMarker = L.marker(
-        [ordered[0].lat, ordered[0].lon],
-        { icon: vehicleIcon }
-    )
-    .bindPopup(
-        `<b>Selected Vehicle</b><br>
-        ${selectedVehicle.number}<br>
-        ${selectedVehicle.type}`
-    )
-    .addTo(map);
-}
 
         // Add glowing markers
         ordered.forEach((point, index) => {
@@ -497,7 +466,71 @@ try {
 let fleetVehicles = [];
 let selectedVehicle = null;
 let vehicleMarker = null;
+let lastRouteStart = null;
 let routeHistory = [];
+
+// =================================
+// VEHICLE MARKER ON LIVE MAP
+// =================================
+
+function showSelectedVehicleMarker() {
+
+    // Remove previous vehicle marker
+    if (vehicleMarker) {
+        map.removeLayer(vehicleMarker);
+        vehicleMarker = null;
+    }
+
+    // Check whether a vehicle and route position exist
+    if (!selectedVehicle || !lastRouteStart) {
+        return;
+    }
+
+    // Vehicle symbols
+    const vehicleIcons = {
+        "Truck": "🚚",
+        "Van": "🚐",
+        "Mini Truck": "🚛",
+        "Bike": "🏍️"
+    };
+
+    const vehicleSymbol =
+        vehicleIcons[selectedVehicle.type] || "🚘";
+
+    // Create custom vehicle icon
+    const vehicleIcon = L.divIcon({
+        className: "vehicle-map-icon",
+
+        html: `
+            <div style="
+                font-size: 30px;
+                background: #111827;
+                border: 2px solid #ef4444;
+                border-radius: 12px;
+                padding: 7px;
+                box-shadow: 0 0 18px #ef4444;
+            ">
+                ${vehicleSymbol}
+            </div>
+        `,
+
+        iconSize: [48, 48],
+        iconAnchor: [24, 24]
+    });
+
+    // Display vehicle at warehouse/start position
+    vehicleMarker = L.marker(
+        [lastRouteStart.lat, lastRouteStart.lon],
+        { icon: vehicleIcon }
+    )
+    .bindPopup(`
+        <b>Selected Vehicle</b><br>
+        ${selectedVehicle.number}<br>
+        ${selectedVehicle.type}
+    `)
+    .addTo(map);
+}
+
 
 
 function displayRouteHistory() {
@@ -677,10 +710,18 @@ function displayFleetVehicles() {
 selectButton.className = 'delivery-action';
 selectButton.textContent = 'Select';
 
+
 selectButton.addEventListener('click', function () {
+
+    // Store selected vehicle
     selectedVehicle = vehicle;
+
+    // Update vehicle symbol on map immediately
+    showSelectedVehicleMarker();
+
     alert(vehicle.number + ' selected successfully!');
 });
+
 
         const removeButton = document.createElement('button');
         removeButton.className = 'delivery-action';
