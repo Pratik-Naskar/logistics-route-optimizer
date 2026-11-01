@@ -1,0 +1,345 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LRO | Logistics Route Optimizer</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+<div class="dashboard">
+
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon">L</div>
+            <div>
+                <h2>LRO</h2>
+                <span>LOGISTICS INTELLIGENCE</span>
+            </div>
+        </div>
+
+        <p class="menu-label">WORKSPACE</p>
+        <a class="nav-item active" href="/optimizer">◈ &nbsp; Dashboard</a>
+        <a class="nav-item" href="#planner">＋ &nbsp; Create New Route</a>
+        <a class="nav-item" href="#map-section">◎ &nbsp; Live Map</a>
+        <a class="nav-item" href="#analytics">▥ &nbsp; Analytics</a>
+
+        <div class="sidebar-bottom">
+            <div class="system-status">
+                <span class="status-dot"></span>
+                ROUTE ENGINE ONLINE
+            </div>
+            <a class="nav-item end-link" href="/goodbye">← &nbsp; Exit Dashboard</a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <p class="eyebrow">LOGISTICS CONTROL CENTER</p>
+                <h1>Route Command Center</h1>
+                <p class="subtitle">Plan, optimize and monitor your deliveries.</p>
+            </div>
+            <div class="top-status">
+                <span class="status-dot"></span> SYSTEM OPERATIONAL
+            </div>
+        </header>
+
+        <section class="stats-grid" id="analytics">
+            <div class="stat-card">
+                <span class="stat-icon">⌖</span>
+                <p>TOTAL LOCATIONS</p>
+                <h2 id="locationCount">0</h2>
+                <small>Warehouse + delivery stops</small>
+            </div>
+
+            <div class="stat-card">
+                <span class="stat-icon orange">↗</span>
+                <p>ROUTE DISTANCE</p>
+                <h2 id="distanceStat">--</h2>
+                <small>Optimized journey</small>
+            </div>
+
+            <div class="stat-card">
+                <span class="stat-icon cyan">◷</span>
+                <p>ESTIMATED TIME</p>
+                <h2 id="timeStat">--</h2>
+                <small>Based on road route</small>
+            </div>
+
+            <div class="stat-card">
+    <span class="stat-icon green">✓</span>
+    <p>ROUTE STATUS</p>
+    <h2 id="routeStatus">READY</h2>
+    <small>Optimization engine</small>
+</div>
+
+<div class="stat-card">
+    <span class="stat-icon orange">⛽</span>
+    <p>FUEL CONSUMPTION</p>
+    <h2 id="fuelStat">-- L</h2>
+    <small>Estimated fuel usage</small>
+</div>
+
+<div class="stat-card">
+    <span class="stat-icon green">₹</span>
+    <p>ESTIMATED FUEL COST</p>
+    <h2 id="fuelCostStat">₹ --</h2>
+    <small>Estimated journey cost</small>
+</div>
+</section>
+
+        <section class="workspace">
+
+            <div class="planner-panel" id="planner">
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow">ROUTE MANAGEMENT</p>
+                        <h2>Plan Your Delivery</h2>
+                    </div>
+                    <span class="live-tag">● LIVE</span>
+                </div>
+                <label for="fuelType">SELECT VEHICLE FUEL TYPE</label>
+<select id="fuelType">
+    <option value="petrol">Petrol (₹109.89/L)</option>
+    <option value="diesel">Diesel (₹100.00/L)</option>
+</select>
+                <label for="warehouse">WAREHOUSE / STARTING POINT</label>
+                <input id="warehouse" type="text"
+                    placeholder="Enter warehouse address">
+
+                <label for="stops">DELIVERY LOCATIONS</label>
+                <textarea id="stops" rows="6"
+                    placeholder="Enter one delivery address per line"></textarea>
+
+                <p class="input-hint">Add one address on each line. Maximum 20 delivery stops.</p>
+
+                <button id="optimizeBtn" class="optimize-button">
+                    ✦ &nbsp; OPTIMIZE DELIVERY ROUTE
+                </button>
+
+                <p id="status">Enter your locations to get started.</p>
+
+                <div id="summary"></div>
+
+                <div class="route-heading">OPTIMIZED STOP ORDER</div>
+                <ol id="routeList"></ol>
+            </div>
+
+            <div class="map-panel" id="map-section">
+                <div class="map-heading">
+                    <div>
+                        <p class="eyebrow">GEOGRAPHIC OVERVIEW</p>
+                        <h2>Live Route Visualization</h2>
+                    </div>
+                    <span class="map-label">OPENSTREETMAP</span>
+                </div>
+
+                <div class="map-controls">
+    <button onclick="switchMapStyle('dark')" class="map-btn active">
+        🌙 Premium Dark
+    </button>
+
+    <button onclick="switchMapStyle('satellite')" class="map-btn">
+        🛰 Satellite
+    </button>
+</div>
+
+<div id="map"></div>
+
+                <div class="map-footer">
+                    <span><i class="legend warehouse-legend"></i> Warehouse</span>
+                    <span><i class="legend stop-legend"></i> Delivery stops</span>
+                    <span><i class="legend route-legend"></i> Optimized route</span>
+                </div>
+            </div>
+
+        </section>
+                <!-- DELIVERY MANAGEMENT -->
+        <section class="delivery-section" id="deliveries">
+
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">LOGISTICS MANAGEMENT</p>
+                    <h2>Delivery Management</h2>
+                </div>
+                <span class="live-tag">● TRACKING</span>
+            </div>
+
+            <div class="delivery-table-wrapper">
+                <table class="delivery-table">
+                    <thead>
+                        <tr>
+                            <th>STOP NO.</th>
+                            <th>DELIVERY LOCATION</th>
+                            <th>DELIVERY STATUS</th>
+                            <th>ACTION</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="deliveryTableBody">
+                        <tr>
+                            <td colspan="4">
+                                Optimize a route to view deliveries here.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+                <!-- FLEET MANAGEMENT -->
+        <section class="fleet-section" id="fleet">
+
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">VEHICLE MANAGEMENT</p>
+                    <h2>Fleet Management</h2>
+                </div>
+                <span class="live-tag">● FLEET CONTROL</span>
+            </div>
+
+            <div class="fleet-form">
+
+                <div>
+                    <label for="vehicleNumber">VEHICLE REGISTRATION NUMBER</label>
+                    <input type="text" id="vehicleNumber"
+                        placeholder="e.g. KA 05 AB 1234">
+                </div>
+
+                <div>
+                    <label for="vehicleType">VEHICLE TYPE</label>
+                    <select id="vehicleType">
+                        <option value="">Select vehicle type</option>
+                        <option value="Truck">Truck</option>
+                        <option value="Van">Van</option>
+                        <option value="Mini Truck">Mini Truck</option>
+                        <option value="Bike">Bike</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="vehicleFuel">FUEL TYPE</label>
+                    <select id="vehicleFuel">
+                        <option value="">Select fuel</option>
+                        <option value="Petrol">Petrol</option>
+                        <option value="Diesel">Diesel</option>
+                        <option value="Electric">Electric</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="vehicleMileage">MILEAGE (KM/L)</label>
+                    <input type="number" id="vehicleMileage"
+                        placeholder="e.g. 15" min="0.1" step="0.1">
+                </div>
+
+                <button type="button" id="addVehicleBtn">
+                    + ADD VEHICLE
+                </button>
+
+            </div>
+
+            <div class="delivery-table-wrapper">
+                <table class="delivery-table">
+                    <thead>
+                        <tr>
+                            <th>REGISTRATION NO.</th>
+                            <th>VEHICLE TYPE</th>
+                            <th>FUEL TYPE</th>
+                            <th>MILEAGE</th>
+                            <th>AVAILABILITY</th>
+                            <th>ACTION</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="fleetTableBody">
+                        <tr>
+                            <td colspan="6">No vehicles added yet.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+                <!-- ROUTE HISTORY -->
+        <section class="history-section" id="history">
+
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">ROUTE RECORDS</p>
+                    <h2>Route History</h2>
+                </div>
+                <span class="live-tag">● HISTORY LOG</span>
+            </div>
+
+            <div class="delivery-table-wrapper">
+                <table class="delivery-table">
+                    <thead>
+                        <tr>
+                            <th>ROUTE NO.</th>
+                            <th>WAREHOUSE</th>
+                            <th>DELIVERY STOPS</th>
+                            <th>DISTANCE</th>
+                            <th>ESTIMATED TIME</th>
+                            <th>FUEL USED</th>
+                            <th>FUEL COST</th>
+                            <th>ACTION</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="historyTableBody">
+                        <tr>
+                            <td colspan="8">
+                                No route history available yet.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+        <!-- ADVANCED ANALYTICS -->
+<section class="history-section" id="advanced-analytics">
+
+    <div class="section-heading">
+        <div>
+            <p class="eyebrow">PERFORMANCE INSIGHTS</p>
+            <h2>Advanced Analytics</h2>
+        </div>
+        <span class="live-tag">● ANALYTICS</span>
+    </div>
+
+    <div class="analytics-grid">
+
+        <div class="analytics-card">
+            <h3>Route Distance</h3>
+            <canvas id="distanceChart"></canvas>
+        </div>
+
+        <div class="analytics-card">
+            <h3>Fuel Cost Analysis</h3>
+            <canvas id="fuelChart"></canvas>
+        </div>
+
+    </div>
+
+</section>
+        <footer>
+            <span>LOGISTICS ROUTE OPTIMIZER</span>
+            <span>DESIGNED & DEVELOPED BY PRATIK NASKAR & AIMEN SHARIFF</span>
+        </footer>
+
+    </main>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

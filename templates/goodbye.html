@@ -1,0 +1,293 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Thank You | LRO</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: #080808;
+            font-family: Arial, sans-serif;
+            color: white;
+            padding: 25px;
+        }
+
+        /* Background Effects */
+
+        body::before {
+            content: "";
+            position: fixed;
+            width: 550px;
+            height: 550px;
+            background: rgba(220, 38, 38, 0.12);
+            filter: blur(130px);
+            border-radius: 50%;
+            top: -200px;
+            left: -150px;
+            animation: glow 5s ease-in-out infinite alternate;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            width: 450px;
+            height: 450px;
+            background: rgba(220, 38, 38, 0.10);
+            filter: blur(130px);
+            border-radius: 50%;
+            bottom: -200px;
+            right: -100px;
+            animation: glow 6s ease-in-out infinite alternate-reverse;
+        }
+
+        /* Thank You Card */
+
+        .thankyou-card {
+            position: relative;
+            z-index: 1;
+            max-width: 750px;
+            width: 100%;
+            padding: 65px 40px;
+            text-align: center;
+            background: rgba(18, 18, 18, 0.95);
+            border: 1px solid rgba(220, 38, 38, 0.35);
+            border-radius: 18px;
+            box-shadow: 0 0 50px rgba(220, 38, 38, 0.10);
+
+            opacity: 0;
+            transform: translateY(45px) scale(0.96);
+            animation: cardEnter 1s ease forwards;
+        }
+
+        .symbol {
+            font-size: 55px;
+            color: #ef3038;
+            margin-bottom: 22px;
+            animation: symbolPulse 2s infinite;
+        }
+
+        .eyebrow {
+            color: #ef3038;
+            letter-spacing: 4px;
+            font-size: 12px;
+            margin-bottom: 20px;
+            animation: fadeUp 1s 0.4s both;
+        }
+
+        h1 {
+            font-size: clamp(38px, 7vw, 65px);
+            font-weight: 800;
+            margin-bottom: 22px;
+            letter-spacing: 2px;
+            animation: fadeUp 1s 0.6s both;
+        }
+
+        h1 span {
+            color: #ef3038;
+        }
+
+        .message {
+            color: #bdbdbd;
+            line-height: 1.9;
+            font-size: 15px;
+            max-width: 560px;
+            margin: auto;
+            animation: fadeUp 1s 0.8s both;
+        }
+
+        /* Developer Section */
+
+        .developers {
+            margin: 38px 0 32px;
+            padding: 25px 10px;
+            border-top: 1px solid #333;
+            border-bottom: 1px solid #333;
+            animation: fadeUp 1s 1s both;
+        }
+
+        .developers p {
+            color: #ef3038;
+            font-size: 11px;
+            letter-spacing: 3px;
+            margin-bottom: 15px;
+        }
+
+        .developers h3 {
+            font-size: 17px;
+            letter-spacing: 1px;
+        }
+
+        .developers h3 span {
+            color: #ef3038;
+        }
+
+        /* Home Button */
+
+        .home-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            padding: 16px 30px;
+            background: linear-gradient(90deg, #b91c1c, #ef3038);
+            color: white;
+            text-decoration: none;
+            border-radius: 7px;
+            font-size: 13px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: 0.3s;
+            animation: fadeUp 1s 1.2s both;
+        }
+
+        .home-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 25px rgba(239, 48, 56, 0.45);
+        }
+
+        .home-button .arrow {
+            font-size: 20px;
+            transition: 0.3s;
+        }
+
+        .home-button:hover .arrow {
+            transform: translateX(-5px);
+        }
+
+        /* Footer */
+
+        .footer {
+            margin-top: 35px;
+            color: #777;
+            font-size: 10px;
+            letter-spacing: 2px;
+            animation: fadeUp 1s 1.4s both;
+        }
+
+        /* Animations */
+
+        @keyframes cardEnter {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes symbolPulse {
+            0%, 100% {
+                transform: scale(1);
+                text-shadow: 0 0 10px rgba(239, 48, 56, 0.3);
+            }
+
+            50% {
+                transform: scale(1.12);
+                text-shadow: 0 0 25px rgba(239, 48, 56, 0.8);
+            }
+        }
+
+        @keyframes glow {
+            from {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+
+            to {
+                transform: scale(1.3);
+                opacity: 0.9;
+            }
+        }
+
+        /* Mobile Responsive */
+
+        @media (max-width: 600px) {
+            .thankyou-card {
+                padding: 45px 22px;
+            }
+
+            .developers h3 {
+                font-size: 14px;
+            }
+
+            .message {
+                font-size: 14px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="thankyou-card">
+
+        <div class="symbol">◈</div>
+
+        <p class="eyebrow">LOGISTICS INTELLIGENCE</p>
+
+        <h1>
+            THANK <span>YOU!</span>
+        </h1>
+
+        <p class="message">
+            Thank you for visiting Logistics Route Optimizer.
+            We appreciate your time and hope you had a great
+            experience exploring our logistics platform.
+        </p>
+
+        <div class="developers">
+
+            <p>CONCEPTUALIZED AND DEVELOPED BY</p>
+
+            <h3>
+                PRATIK NASKAR
+                <span>&</span>
+                AIMEN SHARIFF
+            </h3>
+
+        </div>
+
+        <a href="/" class="home-button">
+            <span class="arrow">←</span>
+            BACK TO HOME
+        </a>
+
+        <div class="footer">
+            LOGISTICS ROUTE OPTIMIZER · LRO © 2026
+        </div>
+
+    </div>
+
+</body>
+</html>
