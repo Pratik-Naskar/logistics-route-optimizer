@@ -1,7 +1,11 @@
 
 import sqlite3
+import os
 
-DATABASE_NAME = "lro_database.db"
+DATABASE_NAME = os.environ.get(
+    "DATABASE_PATH",
+    "lro_database.db"
+)
 
 
 # DATABASE CONNECTION
