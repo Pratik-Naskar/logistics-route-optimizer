@@ -8,53 +8,47 @@
 
     <title>Login | Logistics Route Optimizer</title>
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='auth.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='auth.css') }}">
 </head>
 
 <body>
 
-    <!-- Background Effects -->
     <div class="background-glow glow-one"></div>
     <div class="background-glow glow-two"></div>
 
-    <!-- Navigation -->
     <nav class="navbar">
-
-        <a href="{{ url_for('home') }}" class="brand">
-            <span class="brand-icon">L</span>
-            LOGISTICS <span>ROUTE OPTIMIZER</span>
-        </a>
+        <div class="brand">
+            <div class="brand-icon">L</div>
+            <span>LOGISTICS <strong>INTELLIGENCE</strong></span>
+        </div>
 
         <div class="nav-status">
             <span class="status-dot"></span>
-            SMART LOGISTICS PLATFORM
+            SYSTEM ONLINE
         </div>
-
     </nav>
 
-    <!-- Login Section -->
     <main class="auth-container">
 
         <section class="auth-card">
 
-            <div class="auth-logo">LRO</div>
-
-            <div class="eyebrow">
-                <span class="red-line"></span>
-                SECURE ACCESS
+            <div class="auth-logo">
+                <span class="eyebrow">LOGISTICS ROUTE OPTIMIZER</span>
+                <div class="red-line"></div>
             </div>
 
-            <h1>
-                WELCOME <span class="red-text">BACK.</span>
-            </h1>
+            <h1>WELCOME <span class="red-text">BACK.</span></h1>
 
             <p class="auth-description">
-                Sign in to access your personal Logistics
-                Route Optimizer dashboard.
+                Sign in to access your intelligent logistics dashboard.
             </p>
 
-            <!-- Login Form -->
+            {% if error %}
+                <div class="error-message">
+                    {{ error }}
+                </div>
+            {% endif %}
+
             <form method="POST" action="{{ url_for('login') }}">
 
                 <div class="form-group">
@@ -66,54 +60,85 @@
                         name="email"
                         placeholder="Enter your email address"
                         required
+                        autocomplete="email"
                     >
                 </div>
 
                 <div class="form-group">
                     <label for="password">PASSWORD</label>
 
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        placeholder="Enter your password"
-                        required
-                    >
+                    <div class="password-field">
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Enter your password"
+                            required
+                            autocomplete="current-password"
+                        >
+
+                        <button
+                            type="button"
+                            class="toggle-password"
+                            onclick="togglePassword('password', this)"
+                            aria-label="Show password"
+                        >
+                            SHOW
+                        </button>
+                    </div>
+
+                    <div class="forgot-password-link">
+                        <a href="{{ url_for('forgot_password') }}">
+                            Forgot Password?
+                        </a>
+                    </div>
                 </div>
 
-                {% if error %}
-                    <div class="error-message">
-                        {{ error }}
-                    </div>
-                {% endif %}
-
                 <button type="submit" class="auth-button">
-                    <span>LOGIN TO YOUR ACCOUNT</span>
-                    <span class="arrow">→</span>
+                    SIGN IN <span class="arrow">→</span>
                 </button>
 
             </form>
 
-            <div class="auth-divider"></div>
+            <div class="auth-divider">
+                <span>OR</span>
+            </div>
 
-            <p class="auth-switch">
+            <div class="auth-switch">
                 Don't have an account?
                 <a href="{{ url_for('register') }}">Create Account</a>
-            </p>
+            </div>
 
-            <a href="{{ url_for('home') }}" class="back-link">
-                ← BACK TO WELCOME PAGE
-            </a>
+            <div class="back-link">
+                <a href="{{ url_for('home') }}">← Back to Welcome Page</a>
+            </div>
 
         </section>
 
     </main>
 
-    <!-- Footer -->
-    <footer>
-        <span>LOGISTICS ROUTE OPTIMIZER © 2026</span>
-        <span>INTELLIGENCE • EFFICIENCY • DELIVERY</span>
+    <footer class="auth-footer">
+        <p>LOGISTICS ROUTE OPTIMIZER © 2026</p>
+        <p>INTELLIGENCE • EFFICIENCY • DELIVERY</p>
     </footer>
+
+    <script>
+        function togglePassword(inputId, button) {
+
+            const input = document.getElementById(inputId);
+
+            if (input.type === "password") {
+                input.type = "text";
+                button.textContent = "HIDE";
+                button.setAttribute("aria-label", "Hide password");
+            } else {
+                input.type = "password";
+                button.textContent = "SHOW";
+                button.setAttribute("aria-label", "Show password");
+            }
+
+        }
+    </script>
 
 </body>
 </html>

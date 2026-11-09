@@ -6,55 +6,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Register | Logistics Route Optimizer</title>
+    <title>Create Account | Logistics Route Optimizer</title>
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='auth.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='auth.css') }}">
 </head>
 
 <body>
 
-    <!-- Background Effects -->
     <div class="background-glow glow-one"></div>
     <div class="background-glow glow-two"></div>
 
-    <!-- Navigation -->
     <nav class="navbar">
-
-        <a href="{{ url_for('home') }}" class="brand">
-            <span class="brand-icon">L</span>
-            LOGISTICS <span>ROUTE OPTIMIZER</span>
-        </a>
+        <div class="brand">
+            <div class="brand-icon">L</div>
+            <span>LOGISTICS <strong>INTELLIGENCE</strong></span>
+        </div>
 
         <div class="nav-status">
             <span class="status-dot"></span>
-            SMART LOGISTICS PLATFORM
+            SYSTEM ONLINE
         </div>
-
     </nav>
 
-    <!-- Registration Section -->
     <main class="auth-container">
 
         <section class="auth-card register-card">
 
-            <div class="auth-logo">LRO</div>
-
-            <div class="eyebrow">
-                <span class="red-line"></span>
-                CREATE YOUR ACCOUNT
+            <div class="auth-logo">
+                <span class="eyebrow">LOGISTICS ROUTE OPTIMIZER</span>
+                <div class="red-line"></div>
             </div>
 
-            <h1>
-                JOIN <span class="red-text">LRO.</span>
-            </h1>
+            <h1>CREATE <span class="red-text">ACCOUNT.</span></h1>
 
             <p class="auth-description">
-                Create your personal account to manage
-                vehicles, deliveries and optimized routes.
+                Join LRO and manage your logistics operations intelligently.
             </p>
 
-            <!-- Registration Form -->
+            {% if error %}
+                <div class="error-message">
+                    {{ error }}
+                </div>
+            {% endif %}
+
             <form method="POST" action="{{ url_for('register') }}">
 
                 <div class="form-group">
@@ -66,6 +60,7 @@
                         name="fullname"
                         placeholder="Enter your full name"
                         required
+                        autocomplete="name"
                     >
                 </div>
 
@@ -78,6 +73,7 @@
                         name="email"
                         placeholder="Enter your email address"
                         required
+                        autocomplete="email"
                     >
                 </div>
 
@@ -88,72 +84,109 @@
                         type="tel"
                         id="mobile"
                         name="mobile"
-                        placeholder="Enter your mobile number"
+                        placeholder="Enter 10-digit mobile number"
                         pattern="[0-9]{10}"
                         maxlength="10"
                         required
+                        autocomplete="tel"
                     >
                 </div>
 
                 <div class="form-group">
                     <label for="password">PASSWORD</label>
 
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        placeholder="Create a password"
-                        minlength="8"
-                        required
-                    >
+                    <div class="password-field">
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Create a password (minimum 8 characters)"
+                            minlength="8"
+                            required
+                            autocomplete="new-password"
+                        >
+
+                        <button
+                            type="button"
+                            class="toggle-password"
+                            onclick="togglePassword('password', this)"
+                            aria-label="Show password"
+                        >
+                            SHOW
+                        </button>
+                    </div>
                 </div>
 
                 <div class="form-group">
                     <label for="confirm_password">CONFIRM PASSWORD</label>
 
-                    <input
-                        type="password"
-                        id="confirm_password"
-                        name="confirm_password"
-                        placeholder="Re-enter your password"
-                        minlength="8"
-                        required
-                    >
+                    <div class="password-field">
+                        <input
+                            type="password"
+                            id="confirm_password"
+                            name="confirm_password"
+                            placeholder="Re-enter your password"
+                            minlength="8"
+                            required
+                            autocomplete="new-password"
+                        >
+
+                        <button
+                            type="button"
+                            class="toggle-password"
+                            onclick="togglePassword('confirm_password', this)"
+                            aria-label="Show password"
+                        >
+                            SHOW
+                        </button>
+                    </div>
                 </div>
 
-                {% if error %}
-                    <div class="error-message">
-                        {{ error }}
-                    </div>
-                {% endif %}
-
                 <button type="submit" class="auth-button">
-                    <span>CREATE MY ACCOUNT</span>
-                    <span class="arrow">→</span>
+                    CREATE ACCOUNT <span class="arrow">→</span>
                 </button>
 
             </form>
 
-            <div class="auth-divider"></div>
+            <div class="auth-divider">
+                <span>OR</span>
+            </div>
 
-            <p class="auth-switch">
+            <div class="auth-switch">
                 Already have an account?
-                <a href="{{ url_for('login') }}">Login</a>
-            </p>
+                <a href="{{ url_for('login') }}">Sign In</a>
+            </div>
 
-            <a href="{{ url_for('home') }}" class="back-link">
-                ← BACK TO WELCOME PAGE
-            </a>
+            <div class="back-link">
+                <a href="{{ url_for('home') }}">← Back to Welcome Page</a>
+            </div>
 
         </section>
 
     </main>
 
-    <!-- Footer -->
-    <footer>
-        <span>LOGISTICS ROUTE OPTIMIZER © 2026</span>
-        <span>INTELLIGENCE • EFFICIENCY • DELIVERY</span>
+    <footer class="auth-footer">
+        <p>LOGISTICS ROUTE OPTIMIZER © 2026</p>
+        <p>INTELLIGENCE • EFFICIENCY • DELIVERY</p>
     </footer>
+
+    <script>
+        function togglePassword(inputId, button) {
+
+            const input = document.getElementById(inputId);
+
+            if (input.type === "password") {
+                input.type = "text";
+                button.textContent = "HIDE";
+                button.setAttribute("aria-label", "Hide password");
+            } else {
+                input.type = "password";
+                button.textContent = "SHOW";
+                button.setAttribute("aria-label", "Show password");
+            }
+
+        }
+    </script>
 
 </body>
 </html>
